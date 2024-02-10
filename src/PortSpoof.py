@@ -1,4 +1,5 @@
-import socket, logging, sys, argparse
+import socket, logging, argparse
+from sofah_logger import SofahLogger
 
 class PortSpoof:
     """
@@ -96,13 +97,6 @@ class PortSpoof:
     
 
 if __name__ == '__main__':
-    logger = logging.Logger("portspoof")
-    logger.setLevel(logging.DEBUG)  # Set the logging level as needed
-    handler = logging.StreamHandler(sys.stdout)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-
     parser = argparse.ArgumentParser(description="Process some integers.")
 
     # Add arguments
@@ -111,5 +105,6 @@ if __name__ == '__main__':
     parser.add_argument('-b', '--banner', type=str, required=True, help='The banner or http-header to send to the client')
     parser.add_argument('-i', '--info_port', type=str, required=True, help='The actual outside port of the service for logging purposes')
     args = parser.parse_args()
+    logger = SofahLogger("http://log_api:50005", args.info_port)
     ps = PortSpoof(ip="0.0.0.0", port=args.port, banner_header=args.banner, mode=args.mode, logger=logger)
     ps.spoof()
