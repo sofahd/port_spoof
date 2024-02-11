@@ -1,4 +1,4 @@
-import socket, logging, argparse
+import socket, argparse
 from sofah_logger import SofahLogger
 
 class PortSpoof:
@@ -8,7 +8,7 @@ class PortSpoof:
     It should be able to work both in "banner" and in "http-header" mode.
     """
 
-    def __init__(self, mode:str, banner_header:str, ip:str, port:int, logger:logging.Logger) -> None:
+    def __init__(self, mode:str, banner_header:str, ip:str, port:int, logger:SofahLogger) -> None:
         """
         This method is the constructor for the PortSpoof class.
         It is mainly used to set the mode to "banner" or "http-header", according with the appropriate parameter.
@@ -25,7 +25,7 @@ class PortSpoof:
         :param port: The port to listen on.
         :type port: int
         :param logger: the logger to use.
-        :type logger: Logger
+        :type logger: SofahLogger
         :return: None
         """
 
@@ -68,7 +68,7 @@ class PortSpoof:
                 client.close()
             
             except Exception as e:
-                self.logger.debug(f"Error: {e}")
+                self.logger.error(method="PortSpoof.spoof", message=f"An error occurred: {e}")
                 continue
     
     def is_valid_http_request(self, request_line:str) -> bool:
