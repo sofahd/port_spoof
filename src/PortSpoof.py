@@ -1,5 +1,5 @@
 import socket, argparse
-from sofah_logger import SofahLogger
+from sofahutils import SofahLogger
 
 class PortSpoof:
     """
