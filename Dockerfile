@@ -4,11 +4,13 @@ ARG POOF_PORT
 ARG POOF_MODE
 ARG POOF_BANNER
 ARG TOKEN
+ARG LOG_API
 
 # Set the build-time variable as an environment variable
 ENV POOF_PORT=${POOF_PORT}
 ENV POOF_MODE=${POOF_MODE}
 ENV POOF_BANNER=${POOF_BANNER}
+ENV LOG_API=${LOG_API}
 
 # Copy files
 COPY ./src /home/poof/
@@ -27,6 +29,6 @@ RUN apk --no-cache -U add \
 WORKDIR /home/poof
 USER poof:poof
 
-CMD python3 PortSpoof.py -p 65100 -m "$POOF_MODE" -b "$POOF_BANNER" -i "$POOF_PORT"
+CMD python3 PortSpoof.py -p 65100 -m "$POOF_MODE" -b "$POOF_BANNER" -i "$POOF_PORT" -l "$LOG_API"
 
 
