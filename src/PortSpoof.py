@@ -68,7 +68,6 @@ class PortSpoof:
                 client.close()
             
             except Exception as e:
-                self.logger.error(method="PortSpoof.spoof", message=f"An error occurred: {e}")
                 continue
     
     def is_valid_http_request(self, request_line:str) -> bool:
