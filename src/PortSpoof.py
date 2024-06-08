@@ -29,7 +29,7 @@ class PortSpoof:
         :return: None
         """
 
-        if mode in ["banner", "http-header"]:
+        if mode in ["banner", "http-header", "checkpoint"]:
             self.mode = mode
         else:
             raise ValueError(f"Invalid mode: {mode}")
@@ -64,7 +64,11 @@ class PortSpoof:
                 elif self.mode == "http-header":
                     if data and self.is_valid_http_request(data.decode('utf-8')):
                         client.send(bytes(f"HTTP/1.1 200 OK\r\nServer: {self.banner_header}\r\n\r\n", 'utf-8'))
-                    
+                        
+                elif self.mode == "checkpoint":
+                    if data and data.decode('utf-8') == "\r\n\r\n":
+                        client.sendall(b"Y\x00\x00\x00")
+                        
                 client.close()
             
             except Exception as e:
@@ -100,7 +104,7 @@ if __name__ == '__main__':
 
     # Add arguments
     parser.add_argument('-p', '--port', type=int, required=True, help='The port to listen on')
-    parser.add_argument('-m', '--mode', type=str, required=True, choices=['banner', 'http-header'], help='The mode you want to run the script in')
+    parser.add_argument('-m', '--mode', type=str, required=True, choices=['banner', 'http-header', 'checkpoint'], help='The mode you want to run the script in')
     parser.add_argument('-b', '--banner', type=str, required=True, help='The banner or http-header to send to the client')
     parser.add_argument('-i', '--info_port', type=str, required=True, help='The actual outside port of the service for logging purposes')
     parser.add_argument('-l', '--log', type=str, required=True, help='The log server to send logs to with http and porr (e.g. http://log_api:5000)')
